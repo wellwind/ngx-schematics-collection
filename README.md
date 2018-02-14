@@ -1,28 +1,13 @@
-# Getting Started With Schematics
+# Schematics Collection
 
-This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics to NPM.
+Some useful schematics.
 
-### Testing
+# Install
 
-To test locally, install `@angular-devkit/schematics` globally and use the `schematics` command line tool. That tool acts the same as the `generate` command of the Angular CLI, but also has a debug mode.
+`npm install --save-dev ngx-schematics-collection`
 
-Check the documentation with
-```bash
-schematics --help
-```
+# Usage
 
-### Unit Testing
+## Generate form control
 
-`npm run test` will run the unit tests, using Jasmine as a runner and test framework.
-
-### Publishing
-
-To publish, simply do:
-
-```bash
-npm run build
-npm publish
-```
-
-That's it!
- 
+`ng generate ngx-schematics-collection:form-control componentName`

@@ -20,13 +20,13 @@ import {
   noop,
   template,
   url,
+  FileEntry
 } from '@angular-devkit/schematics';
 import * as ts from 'typescript';
 import { addDeclarationToModule, addExportToModule } from '../utility/ast-utils';
 import { InsertChange } from '../utility/change';
 import { buildRelativePath, findModuleFromOptions } from '../utility/find-module';
 import { Schema as ComponentOptions } from './schema';
-
 
 function addDeclarationToNgModule(options: ComponentOptions): Rule {
   return (host: Tree) => {
@@ -42,16 +42,14 @@ function addDeclarationToNgModule(options: ComponentOptions): Rule {
     const sourceText = text.toString('utf-8');
     const source = ts.createSourceFile(modulePath, sourceText, ts.ScriptTarget.Latest, true);
 
-    const componentPath = `/${options.sourceDir}/${options.path}/`
-                          + (options.flat ? '' : strings.dasherize(options.name) + '/')
-                          + strings.dasherize(options.name)
-                          + '.component';
+    const componentPath =
+      `/${options.sourceDir}/${options.path}/` +
+      (options.flat ? '' : strings.dasherize(options.name) + '/') +
+      strings.dasherize(options.name) +
+      '.component';
     const relativePath = buildRelativePath(modulePath, componentPath);
     const classifiedName = strings.classify(`${options.name}Component`);
-    const declarationChanges = addDeclarationToModule(source,
-                                                      modulePath,
-                                                      classifiedName,
-                                                      relativePath);
+    const declarationChanges = addDeclarationToModule(source, modulePath, classifiedName, relativePath);
 
     const declarationRecorder = host.beginUpdate(modulePath);
     for (const change of declarationChanges) {
@@ -71,9 +69,7 @@ function addDeclarationToNgModule(options: ComponentOptions): Rule {
       const source = ts.createSourceFile(modulePath, sourceText, ts.ScriptTarget.Latest, true);
 
       const exportRecorder = host.beginUpdate(modulePath);
-      const exportChanges = addExportToModule(source, modulePath,
-                                              strings.classify(`${options.name}Component`),
-                                              relativePath);
+      const exportChanges = addExportToModule(source, modulePath, strings.classify(`${options.name}Component`), relativePath);
 
       for (const change of exportChanges) {
         if (change instanceof InsertChange) {
@@ -83,11 +79,9 @@ function addDeclarationToNgModule(options: ComponentOptions): Rule {
       host.commitUpdate(exportRecorder);
     }
 
-
     return host;
   };
 }
-
 
 function buildSelector(options: ComponentOptions) {
   let selector = strings.dasherize(options.name);
@@ -98,7 +92,6 @@ function buildSelector(options: ComponentOptions) {
   return selector;
 }
 
-
 export default function(options: ComponentOptions): Rule {
   const sourceDir = options.sourceDir;
   if (!sourceDir) {
@@ -106,6 +99,13 @@ export default function(options: ComponentOptions): Rule {
   }
 
   return (host: Tree, context: SchematicContext) => {
+    if (!options.prefix && host.exists('.angular-cli.json')) {
+      const fileEntry = host.get('.angular-cli.json');
+      const cliConfig = JSON.parse((fileEntry as FileEntry).content.toString());
+      if (cliConfig['apps'] && cliConfig['apps'][0] && cliConfig['apps'][0]['prefix']) {
+        options.prefix = cliConfig['apps'][0]['prefix'];
+      }
+    }
     options.selector = options.selector || buildSelector(options);
     options.path = options.path ? normalize(options.path) : options.path;
     options.module = findModuleFromOptions(host, options);
@@ -116,17 +116,12 @@ export default function(options: ComponentOptions): Rule {
       options.inlineTemplate ? filter(path => !path.endsWith('.html')) : noop(),
       template({
         ...strings,
-        'if-flat': (s: string) => options.flat ? '' : s,
-        ...options,
+        'if-flat': (s: string) => (options.flat ? '' : s),
+        ...options
       }),
-      move(sourceDir),
+      move(sourceDir)
     ]);
 
-    return chain([
-      branchAndMerge(chain([
-        addDeclarationToNgModule(options),
-        mergeWith(templateSource),
-      ])),
-    ])(host, context);
+    return chain([branchAndMerge(chain([addDeclarationToNgModule(options), mergeWith(templateSource)]))])(host, context);
   };
 }
