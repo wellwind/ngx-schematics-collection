@@ -4,11 +4,10 @@
   "description": "A schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && jasmine **/*_spec.js"
+    "test": "npm run build && jasmine **/*_spec.js",
+    "prepublish": "npm run build"
   },
-  "keywords": [
-    "schematics"
-  ],
+  "keywords": ["schematics", "angular", "angular cli"],
   "author": "",
   "license": "MIT",
   "schematics": "./src/collection.json",
