@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "form-control": {
+      "alias": ["fc"],
+      "description": "Create an Angular component as form control.",
+      "factory": "./form-control",
+      "schema": "./form-control/schema.json"
+    }
+  }
+}
