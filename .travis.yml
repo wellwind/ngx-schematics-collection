@@ -6,6 +6,8 @@ dist: trusty
 node_js:
   - "6.11.0"
 
+before_deploy: "npm run build"
+
 deploy:
   provider: npm
   email: wellwind@gmail.com
