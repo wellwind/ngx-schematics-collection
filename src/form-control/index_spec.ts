@@ -5,7 +5,7 @@ import { createAppModule, getFileContent } from '../utility/test';
 import { Schema as ComponentOptions } from './schema';
 
 
-describe('Component Schematic', () => {
+describe('Form Control Component Schematic', () => {
   const schematicRunner = new SchematicTestRunner(
     'ngx-schematics-collection',
     path.join(__dirname, '../collection.json'),

@@ -1,15 +1,12 @@
 import { Tree, VirtualTree } from '@angular-devkit/schematics';
 import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
+
 import { createAppModule, getFileContent } from '../utility/test';
 import { Schema as DirectiveOptions } from './schema';
 
-
-describe('Directive Schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@schematics/angular',
-    path.join(__dirname, '../collection.json'),
-  );
+describe('Validator Directive Schematic', () => {
+  const schematicRunner = new SchematicTestRunner('@schematics/angular', path.join(__dirname, '../collection.json'));
   const defaultOptions: DirectiveOptions = {
     name: 'foo',
     path: 'app',
@@ -18,7 +15,7 @@ describe('Directive Schematic', () => {
     module: undefined,
     export: false,
     prefix: 'app',
-    flat: true,
+    flat: true
   };
 
   let appTree: Tree;
@@ -31,7 +28,7 @@ describe('Directive Schematic', () => {
   it('should create a directive', () => {
     const options = { ...defaultOptions };
 
-    const tree = schematicRunner.runSchematic('directive', options, appTree);
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/src/app/foo.directive.spec.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/src/app/foo.directive.ts')).toBeGreaterThanOrEqual(0);
@@ -43,7 +40,7 @@ describe('Directive Schematic', () => {
   it('should create respect the flat flag', () => {
     const options = { ...defaultOptions, flat: false };
 
-    const tree = schematicRunner.runSchematic('directive', options, appTree);
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/src/app/foo/foo.directive.spec.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/src/app/foo/foo.directive.ts')).toBeGreaterThanOrEqual(0);
@@ -52,7 +49,9 @@ describe('Directive Schematic', () => {
   it('should find the closest module', () => {
     const options = { ...defaultOptions, flat: false };
     const fooModule = '/src/app/foo/foo.module.ts';
-    appTree.create(fooModule, `
+    appTree.create(
+      fooModule,
+      `
       import { NgModule } from '@angular/core';
 
       @NgModule({
@@ -60,9 +59,10 @@ describe('Directive Schematic', () => {
         declarations: []
       })
       export class FooModule { }
-    `);
+    `
+    );
 
-    const tree = schematicRunner.runSchematic('directive', options, appTree);
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
     const fooModuleContent = getFileContent(tree, fooModule);
     expect(fooModuleContent).toMatch(/import { FooDirective } from '.\/foo.directive'/);
   });
@@ -70,7 +70,7 @@ describe('Directive Schematic', () => {
   it('should export the directive', () => {
     const options = { ...defaultOptions, export: true };
 
-    const tree = schematicRunner.runSchematic('directive', options, appTree);
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
     const appModuleContent = getFileContent(tree, '/src/app/app.module.ts');
     expect(appModuleContent).toMatch(/exports: \[FooDirective\]/);
   });
@@ -78,7 +78,7 @@ describe('Directive Schematic', () => {
   it('should import into a specified module', () => {
     const options = { ...defaultOptions, module: 'app.module.ts' };
 
-    const tree = schematicRunner.runSchematic('directive', options, appTree);
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
     const appModule = getFileContent(tree, '/src/app/app.module.ts');
 
     expect(appModule).toMatch(/import { FooDirective } from '.\/foo.directive'/);
@@ -88,17 +88,39 @@ describe('Directive Schematic', () => {
     const options = { ...defaultOptions, module: '/src/app/app.moduleXXX.ts' };
     let thrownError: Error | null = null;
     try {
-      schematicRunner.runSchematic('directive', options, appTree);
+      schematicRunner.runSchematic('validator', options, appTree);
     } catch (err) {
       thrownError = err;
     }
     expect(thrownError).toBeDefined();
   });
 
+  it('should import some defaults from @angular/forms', () => {
+    const options = { ...defaultOptions, name: 'my-validator' };
+
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
+    const content = getFileContent(tree, '/src/app/my-validator.directive.ts');
+    expect(content).toMatch(/import.*AbstractControl.*from '@angular\/forms';/);
+    expect(content).toMatch(/import.*ValidationErrors.*from '@angular\/forms';/);
+    expect(content).toMatch(/import.*NG_VALIDATORS,.*from '@angular\/forms';/);
+    expect(content).toMatch(/import.*, Validator.*from '@angular\/forms';/);
+  });
+
+  it('should import some async operators from @angular/forms', () => {
+    const options = { ...defaultOptions, name: 'my-validator', isAsync: true };
+
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
+    const content = getFileContent(tree, '/src/app/my-validator.directive.ts');
+    expect(content).toMatch(/import.*AbstractControl.*from '@angular\/forms';/);
+    expect(content).toMatch(/import.*ValidationErrors.*from '@angular\/forms';/);
+    expect(content).toMatch(/import.*NG_ASYNC_VALIDATORS,.*from '@angular\/forms';/);
+    expect(content).toMatch(/import.*, AsyncValidator.*from '@angular\/forms';/);
+  });
+
   it('should converts dash-cased-name to a camelCasedSelector', () => {
     const options = { ...defaultOptions, name: 'my-dir' };
 
-    const tree = schematicRunner.runSchematic('directive', options, appTree);
+    const tree = schematicRunner.runSchematic('validator', options, appTree);
     const content = getFileContent(tree, '/src/app/my-dir.directive.ts');
     expect(content).toMatch(/selector: '\[appMyDir\]'/);
   });
