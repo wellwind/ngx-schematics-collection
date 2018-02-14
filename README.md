@@ -1,5 +1,11 @@
 # Schematics Collection
 
+[![npm version](https://badge.fury.io/js/ngx-schematics-collection.png)](https://badge.fury.io/js/ngx-schematics-collection)
+
+Master: [![Build Status](https://travis-ci.org/wellwind/ngx-schematics-collection.svg?branch=master)](https://travis-ci.org/wellwind/ngx-schematics-collection)
+
+Develop: [![Build Status](https://travis-ci.org/wellwind/ngx-schematics-collection.svg?branch=develop)](https://travis-ci.org/wellwind/ngx-schematics-collection)
+
 Some useful schematics.
 
 # Install
