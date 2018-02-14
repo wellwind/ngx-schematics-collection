@@ -3,9 +3,14 @@
   "schematics": {
     "form-control": {
       "alias": ["fc"],
-      "description": "Create an Angular component as form control.",
+      "description": "Create an Angular form control component.",
       "factory": "./form-control",
       "schema": "./form-control/schema.json"
+    },
+    "validator": {
+      "description": "Create an Angular validator directive.",
+      "factory": "./validator",
+      "schema": "./validator/schema.json"
     }
   }
 }
