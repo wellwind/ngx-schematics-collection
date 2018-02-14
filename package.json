@@ -1,6 +1,6 @@
 {
   "name": "ngx-schematics-collection",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
