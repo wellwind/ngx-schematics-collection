@@ -1,4 +1,4 @@
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { NG_VALUE_ACCESSOR,  } from '@angular/forms';
 import { Component, OnInit, Input<% if(!!viewEncapsulation) { %>, ViewEncapsulation<% }%><% if(changeDetection !== 'Default') { %>, ChangeDetectionStrategy<% }%>, forwardRef } from '@angular/core';
 
 export const <%= underscore(name).toUpperCase() %>_VALUE_ACCESSOR: any = {
@@ -21,7 +21,7 @@ export const <%= underscore(name).toUpperCase() %>_VALUE_ACCESSOR: any = {
   changeDetection: ChangeDetectionStrategy.<%= changeDetection %><% } %>,
   providers: [<%= underscore(name).toUpperCase() %>_VALUE_ACCESSOR]
 })
-export class <%= classify(name) %>Component implements OnInit {
+export class <%= classify(name) %>Component implements OnInit, ControlValueAccessor {
 
   private _value: any;
 

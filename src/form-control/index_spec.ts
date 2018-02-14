@@ -1,10 +1,3 @@
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { Tree, VirtualTree } from '@angular-devkit/schematics';
 import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
@@ -14,7 +7,7 @@ import { Schema as ComponentOptions } from './schema';
 
 describe('Component Schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@schematics/angular',
+    'ngx-schematics-collection',
     path.join(__dirname, '../collection.json'),
   );
   const defaultOptions: ComponentOptions = {
@@ -41,7 +34,7 @@ describe('Component Schematic', () => {
   it('should create a component', () => {
     const options = { ...defaultOptions };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/src/app/foo/foo.component.css')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/src/app/foo/foo.component.html')).toBeGreaterThanOrEqual(0);
@@ -55,7 +48,7 @@ describe('Component Schematic', () => {
   it('should set change detection to OnPush', () => {
     const options = { ...defaultOptions, changeDetection: 'OnPush' };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const tsContent = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(tsContent).toMatch(/changeDetection: ChangeDetectionStrategy.OnPush/);
   });
@@ -63,7 +56,7 @@ describe('Component Schematic', () => {
   it('should not set view encapsulation', () => {
     const options = { ...defaultOptions };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const tsContent = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(tsContent).not.toMatch(/encapsulation: ViewEncapsulation/);
   });
@@ -71,7 +64,7 @@ describe('Component Schematic', () => {
   it('should set view encapsulation to Emulated', () => {
     const options = { ...defaultOptions, viewEncapsulation: 'Emulated' };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const tsContent = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(tsContent).toMatch(/encapsulation: ViewEncapsulation.Emulated/);
   });
@@ -79,7 +72,7 @@ describe('Component Schematic', () => {
   it('should set view encapsulation to None', () => {
     const options = { ...defaultOptions, viewEncapsulation: 'None' };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const tsContent = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(tsContent).toMatch(/encapsulation: ViewEncapsulation.None/);
   });
@@ -87,7 +80,7 @@ describe('Component Schematic', () => {
   it('should create a flat component', () => {
     const options = { ...defaultOptions, flat: true };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/src/app/foo.component.css')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/src/app/foo.component.html')).toBeGreaterThanOrEqual(0);
@@ -108,7 +101,7 @@ describe('Component Schematic', () => {
       export class FooModule { }
     `);
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const fooModuleContent = getFileContent(tree, fooModule);
     expect(fooModuleContent).toMatch(/import { FooComponent } from '.\/foo.component'/);
   });
@@ -116,7 +109,7 @@ describe('Component Schematic', () => {
   it('should export the component', () => {
     const options = { ...defaultOptions, export: true };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const appModuleContent = getFileContent(tree, '/src/app/app.module.ts');
     expect(appModuleContent).toMatch(/exports: \[FooComponent\]/);
   });
@@ -124,7 +117,7 @@ describe('Component Schematic', () => {
   it('should import into a specified module', () => {
     const options = { ...defaultOptions, module: 'app.module.ts' };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const appModule = getFileContent(tree, '/src/app/app.module.ts');
 
     expect(appModule).toMatch(/import { FooComponent } from '.\/foo\/foo.component'/);
@@ -134,7 +127,7 @@ describe('Component Schematic', () => {
     const options = { ...defaultOptions, module: '/src/app/app.moduleXXX.ts' };
     let thrownError: Error | null = null;
     try {
-      schematicRunner.runSchematic('component', options, appTree);
+      schematicRunner.runSchematic('form-control', options, appTree);
     } catch (err) {
       thrownError = err;
     }
@@ -145,7 +138,7 @@ describe('Component Schematic', () => {
     const pathOption = 'app/SOME/UPPER/DIR';
     const options = { ...defaultOptions, path: pathOption };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     let files = tree.files;
     let root = `/src/${pathOption}/foo/foo.component`;
     expect(files.indexOf(`${root}.css`)).toBeGreaterThanOrEqual(0);
@@ -154,7 +147,7 @@ describe('Component Schematic', () => {
     expect(files.indexOf(`${root}.ts`)).toBeGreaterThanOrEqual(0);
 
     const options2 = { ...options, name: 'BAR' };
-    const tree2 = schematicRunner.runSchematic('component', options2, tree);
+    const tree2 = schematicRunner.runSchematic('form-control', options2, tree);
     files = tree2.files;
     root = `/src/${pathOption}/bar/bar.component`;
     expect(files.indexOf(`${root}.css`)).toBeGreaterThanOrEqual(0);
@@ -166,7 +159,7 @@ describe('Component Schematic', () => {
   it('should create a component in a sub-directory', () => {
     const options = { ...defaultOptions, path: 'app/a/b/c' };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const files = tree.files;
     const root = `/src/${options.path}/foo/foo.component`;
     expect(files.indexOf(`${root}.css`)).toBeGreaterThanOrEqual(0);
@@ -178,7 +171,7 @@ describe('Component Schematic', () => {
   it('should use the prefix', () => {
     const options = { ...defaultOptions, prefix: 'pre' };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const content = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(content).toMatch(/selector: 'pre-foo'/);
   });
@@ -186,14 +179,14 @@ describe('Component Schematic', () => {
   it('should not use a prefix if none is passed', () => {
     const options = { ...defaultOptions, prefix: undefined };
 
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const content = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(content).toMatch(/selector: 'foo'/);
   });
 
   it('should respect the inlineTemplate option', () => {
     const options = { ...defaultOptions, inlineTemplate: true };
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const content = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(content).toMatch(/template: /);
     expect(content).not.toMatch(/templateUrl: /);
@@ -202,7 +195,7 @@ describe('Component Schematic', () => {
 
   it('should respect the inlineStyle option', () => {
     const options = { ...defaultOptions, inlineStyle: true };
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const content = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(content).toMatch(/styles: \[/);
     expect(content).not.toMatch(/styleUrls: /);
@@ -211,7 +204,7 @@ describe('Component Schematic', () => {
 
   it('should respect the styleext option', () => {
     const options = { ...defaultOptions, styleext: 'scss' };
-    const tree = schematicRunner.runSchematic('component', options, appTree);
+    const tree = schematicRunner.runSchematic('form-control', options, appTree);
     const content = getFileContent(tree, '/src/app/foo/foo.component.ts');
     expect(content).toMatch(/styleUrls: \['.\/foo.component.scss/);
     expect(tree.files.indexOf('/src/app/foo/foo.component.scss')).toBeGreaterThanOrEqual(0);
@@ -223,7 +216,7 @@ describe('Component Schematic', () => {
     const routingModulePath = `/src/app/${routingFileName}`;
     const newTree = createAppModule(appTree, routingModulePath);
     const options = { ...defaultOptions, module: routingFileName };
-    const tree = schematicRunner.runSchematic('component', options, newTree);
+    const tree = schematicRunner.runSchematic('form-control', options, newTree);
     const content = getFileContent(tree, routingModulePath);
     expect(content).toMatch(/import { FooComponent } from '.\/foo\/foo.component/);
   });
