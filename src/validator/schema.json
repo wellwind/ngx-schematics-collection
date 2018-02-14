@@ -64,6 +64,11 @@
       "type": "boolean",
       "default": false,
       "description": "Specifies if declaring module exports the directive."
+    },
+    "isAsync": {
+      "type":"boolean",
+      "default": false,
+      "description": "Specifies if validator is async."
     }
   },
   "required": [
