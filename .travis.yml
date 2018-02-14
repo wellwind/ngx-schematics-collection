@@ -2,5 +2,16 @@ language: node_js
 sudo: true
 dist: trusty
 
+
 node_js:
-  - '6.11.0'
+  - "6.11.0"
+
+jobs:
+  include:
+    - stage: npm release
+      node_js: "7"
+      script: echo "Deploying to npm ..."
+      deploy:
+        provider: npm
+        api_key: $NPM_API_KEY
+        on: master
