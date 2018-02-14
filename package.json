@@ -7,7 +7,11 @@
     "test": "npm run build && jasmine **/*_spec.js",
     "prepublish": "npm run build"
   },
-  "keywords": ["schematics", "angular", "angular cli"],
+  "keywords": [
+    "schematics",
+    "angular",
+    "angular cli"
+  ],
   "author": "",
   "license": "MIT",
   "schematics": "./src/collection.json",
