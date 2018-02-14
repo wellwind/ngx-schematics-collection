@@ -6,10 +6,9 @@ dist: trusty
 node_js:
   - "6.11.0"
 
-before_deploy: "npm run build"
-
 deploy:
   provider: npm
+  skip_cleanup: true
   email: wellwind@gmail.com
   api_key: $NPM_API_KEY
   on: master
