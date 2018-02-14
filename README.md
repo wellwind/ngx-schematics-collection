@@ -11,3 +11,5 @@ Some useful schematics.
 ## Generate form control
 
 `ng generate ngx-schematics-collection:form-control componentName`
+
+The command above will generate a component with `NG_VALUE_ACCESSOR` related code.
