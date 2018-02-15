@@ -20,6 +20,8 @@ import { InsertChange } from '../utility/change';
 import { buildRelativePath, findModuleFromOptions } from '../utility/find-module';
 import { Schema as ServiceOptions } from './schema';
 
+const allowedGuards = ['CanActivate', 'CanActivateChild', 'CanDeactivate', 'Resolve', 'CanLoad'];
+
 function addProviderToNgModule(options: ServiceOptions): Rule {
   return (host: Tree) => {
     if (!options.module) {
@@ -64,6 +66,10 @@ export default function (options: ServiceOptions): Rule {
   const sourceDir = options.sourceDir;
   if (!sourceDir) {
     throw new SchematicsException(`sourceDir option is required.`);
+  }
+
+  if(allowedGuards.indexOf(<string>options.type) < 0) {
+    throw new SchematicsException('Must set the type of route guard(--type): \'CanActivate\', \'CanActivateChild\', \'CanDeactivate\', \'Resolve\', \'CanLoad\'');
   }
 
   return (host: Tree, context: SchematicContext) => {
