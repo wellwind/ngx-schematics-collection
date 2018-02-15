@@ -36,7 +36,7 @@ export interface Schema {
      */
     module?: string;
     /** 
-     * The type of route guard (CanActive, CanActivateChild, CanDeactivate, Resolve, CanLoad)
+     * The type of route guard (CanActivate, CanActivateChild, CanDeactivate, Resolve, CanLoad)
      */
-    type?: 'CanActive' | 'CanActivateChild' | 'CanDeactivate' | 'Resolve' | 'CanLoad';
+    type?: 'CanActivate' | 'CanActivateChild' | 'CanDeactivate' | 'Resolve' | 'CanLoad';
 }

@@ -46,8 +46,8 @@
     },
     "type": {
       "type": "string",
-      "default": "CanActive",
-      "description": "The type of route guard (CanActive, CanActivateChild, CanDeactivate, Resolve, CanLoad)"
+      "default": "CanActivate",
+      "description": "The type of route guard (CanActivate, CanActivateChild, CanDeactivate, Resolve, CanLoad)"
     }
   },
   "required": [
