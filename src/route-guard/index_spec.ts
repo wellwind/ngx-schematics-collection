@@ -17,6 +17,7 @@ describe('Pipe Schematic', () => {
     spec: true,
     module: undefined,
     flat: false,
+    type: 'CanActivate'
   };
 
   let appTree: Tree;
@@ -29,7 +30,7 @@ describe('Pipe Schematic', () => {
   it('should create a service', () => {
     const options = { ...defaultOptions };
 
-    const tree = schematicRunner.runSchematic('service', options, appTree);
+    const tree = schematicRunner.runSchematic('route-guard', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/src/app/foo/foo.service.spec.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/src/app/foo/foo.service.ts')).toBeGreaterThanOrEqual(0);
@@ -38,7 +39,7 @@ describe('Pipe Schematic', () => {
   it('should not be provided by default', () => {
     const options = { ...defaultOptions };
 
-    const tree = schematicRunner.runSchematic('service', options, appTree);
+    const tree = schematicRunner.runSchematic('route-guard', options, appTree);
     const content = getFileContent(tree, '/src/app/app.module.ts');
     expect(content).not.toMatch(/import { FooService } from '.\/foo\/foo.service'/);
   });
@@ -46,7 +47,7 @@ describe('Pipe Schematic', () => {
   it('should import into a specified module', () => {
     const options = { ...defaultOptions, module: 'app.module.ts' };
 
-    const tree = schematicRunner.runSchematic('service', options, appTree);
+    const tree = schematicRunner.runSchematic('route-guard', options, appTree);
     const content = getFileContent(tree, '/src/app/app.module.ts');
     expect(content).toMatch(/import { FooService } from '.\/foo\/foo.service'/);
   });
@@ -55,7 +56,7 @@ describe('Pipe Schematic', () => {
     const options = { ...defaultOptions, module: '/src/app/app.moduleXXX.ts' };
     let thrownError: Error | null = null;
     try {
-      schematicRunner.runSchematic('service', options, appTree);
+      schematicRunner.runSchematic('route-guard', options, appTree);
     } catch (err) {
       thrownError = err;
     }
@@ -65,7 +66,7 @@ describe('Pipe Schematic', () => {
   it('should respect the spec flag', () => {
     const options = { ...defaultOptions, spec: false };
 
-    const tree = schematicRunner.runSchematic('service', options, appTree);
+    const tree = schematicRunner.runSchematic('route-guard', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/src/app/foo/foo.service.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/src/app/foo/foo.service.spec.ts')).toEqual(-1);
