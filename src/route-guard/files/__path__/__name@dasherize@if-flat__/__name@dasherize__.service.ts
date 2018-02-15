@@ -47,4 +47,15 @@ export class <%= classify(name) %>Service implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
     return null;
   }
+}<% } else if(type === 'CanLoad') { %>import { Injectable } from '@angular/core';
+import { CanLoad, Route } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+@Injectable()
+export class <%= classify(name) %>Service implements CanLoad {
+  constructor() {}
+
+  canLoad(route: Route): boolean | Observable<boolean> | Promise<boolean> {
+    return true;
+  }
 }<% } %>
