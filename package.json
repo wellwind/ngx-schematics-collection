@@ -1,18 +1,26 @@
 {
   "name": "ngx-schematics-collection",
-  "version": "0.0.4",
-  "description": "A schematics",
+  "version": "0.0.5",
+  "description": "A schematics collection for generating Angular related code.",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine **/*_spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wellwind/ngx-schematics-collection.git"
   },
   "keywords": [
     "schematics",
     "angular",
     "angular cli"
   ],
-  "author": "",
+  "author": "Wellwind <wellwind@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wellwind/ngx-schematics-collection/issues"
+  },
+  "homepage": "https://github.com/wellwind/ngx-schematics-collection",
   "schematics": "./src/collection.json",
   "dependencies": {
     "@angular-devkit/core": "^0.3.1",

@@ -11,6 +11,11 @@
       "description": "Create an Angular validator directive.",
       "factory": "./validator",
       "schema": "./validator/schema.json"
+    },
+    "route-guard": {
+      "description": "Create an Angular route guard service.",
+      "factory": "./route-guard",
+      "schema": "./route-guard/schema.json"
     }
   }
 }
